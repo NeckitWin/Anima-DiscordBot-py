@@ -1,0 +1,9 @@
+{
+  "name": "Anima",
+  "version": "1.0.0",
+  "dependencies": {
+    "python": "^3.8",
+    "disnake": "^2.9.1",
+    "venv": "^1.0.1"
+  }
+}
