@@ -8,11 +8,15 @@ class Infomod(commands.Cog):
     async def on_ready(self):
         print(f'Bot Loaded | infomod.py ✅')
 
-    @commands.slash_command()
+    @commands.slash_command(name="bot", description="Основная информация о Anima")
     async def bot(self,interaction):
-        embed = disnake.Embed(title=f"Информация о {self.bot.user.name}", description=f"**{self.bot.user.mention}** - бот написанный для души", color=0x00ff00)
+        embed = disnake.Embed(title=f"Я выполнила твою команду! Меня зовут {self.bot.user.name}", description=f"**{self.bot.user.mention}** Я написанна для души", color=0x00ff00)
         embed.add_field(name="Как пользоваться?", value="Используйте комманду /help", inline=False)
-        embed.set_footer(text="Посоветуй меня друзьям <3")
+        embed.add_field(name="Количество серверов:", value=f"{len(self.bot.guilds)}", inline=True)
+        # с помощью for посчитай всех пользователей на всех серверах и выведи число
+        embed.add_field(name="Количество пользователей:", value=f"{len(self.bot.users)}", inline=True)
+        embed.add_field(name="Мой официальный дискорд сервер:", value="https://discord.gg/pA7hxfHy7A", inline=False)
+        embed.set_footer(text="Добавь меня на свой сервер няя <3")
         embed.set_author(name=f"Запрос от {interaction.author.name}")
         embed.set_thumbnail(url=self.bot.user.avatar.url)
         embed.set_image(url="https://media.tenor.com/g75K3KA3VeAAAAAd/anime-sleep.gif")

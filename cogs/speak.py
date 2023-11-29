@@ -13,13 +13,7 @@ class Speak(commands.Cog):
         if message.author.bot:
             return
         if "привет" in message.content.lower():
-            await message.channel.send(f"Привет, {message.author.mention}!")
-        elif "помогите" in message.content.lower():
-            await message.channel.send(f"{message.author.mention}, я постараюсь вам помочь!!! Используйте в чате [@Anima вопрос] ")
-        elif "тест" in message.content.lower():
-            await message.channel.send(f"Я работаю, всё хорошо")
-        elif "anima" or "анима" in message.content.lower():
-            await message.channel.send(f"Здравствуй, {message.author.mention}, чем я могу тебе помочь? Используй в чате [/help] ")
+            await message.channel.send(f"Приветствую, {message.author.mention}!")
 
 def setup(bot):
     bot.add_cog(Speak(bot))
