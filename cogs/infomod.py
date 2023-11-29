@@ -50,6 +50,17 @@ class Infomod(commands.Cog):
             embed = disnake.Embed(title="Вы запросили баннер", description=f"Пользователя {user.mention}", color=0xa269ff)
             embed.set_image(url=user.banner)
             await interaction.response.send_message(embed=embed)
-# ephemeral=True покажет фантомное предложение
+
+    #команда, которая выводит информацию о сервере, на сервере которому она была вызвана
+    @commands.slash_command(name="server", description="Показывает информацию о сервере")
+    async def server(self, interaction: disnake.CommandInteraction):
+        embed = disnake.Embed(title=f"Информация о сервере {interaction.guild.name}", description=f"Владелец сервера: {interaction.guild.owner.mention}", color=0x2f3136)
+        embed.add_field(name="Количество участников:", value=f"{len(interaction.guild.members)}", inline=True)
+        embed.add_field(name="Количество текстовых каналов:", value=f"{len(interaction.guild.text_channels)}", inline=True)
+        embed.add_field(name="Количество голосовых каналов:", value=f"{len(interaction.guild.voice_channels)}", inline=True)
+        embed.add_field(name="Количество ролей:", value=f"{len(interaction.guild.roles)}", inline=True)
+        embed.set_thumbnail(url=interaction.guild.icon.url)
+        await interaction.response.send_message(embed=embed)
+
 def setup(bot):
     bot.add_cog(Infomod(bot))

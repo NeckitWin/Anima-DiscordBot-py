@@ -12,7 +12,7 @@ class Speak(commands.Cog):
         # Проверка, что сообщение отправлено не ботом, чтобы избежать зацикливания
         if message.author.bot:
             return
-        if "привет" in message.content.lower():
+        if "приветики" in message.content.lower():
             await message.channel.send(f"Приветствую, {message.author.mention}!")
 
 def setup(bot):
