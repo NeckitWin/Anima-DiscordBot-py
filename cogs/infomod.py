@@ -10,13 +10,12 @@ class Infomod(commands.Cog):
 
     @commands.slash_command(name="bot", description="Основная информация о Anima")
     async def bot(self,interaction):
-        embed = disnake.Embed(title=f"Я постараюсь выполнить все твои мечты! А зовут меня {self.bot.user.name}", description=f"**{self.bot.user.mention}** - Я написанна для души, это моё имя", color=0x00ff00)
-        embed.add_field(name="Как пользоваться?", value="Используй комманду /help", inline=False)
+        embed = disnake.Embed(title=f"Я постараюсь выполнить все твои мечты! А зовут меня {self.bot.user.name}", description=f"**{self.bot.user.mention}**", color=0x00ff00)
+        embed.add_field(name="Как мною пользоваться?", value="Используй комманду /help", inline=False)
         embed.add_field(name="Количество серверов:", value=f"{len(self.bot.guilds)}", inline=True)
         embed.add_field(name="Количество пользователей:", value=f"{len(self.bot.users)}", inline=True)
         embed.add_field(name="Мой официальный дискорд сервер:", value="https://discord.gg/pA7hxfHy7A", inline=False)
-        embed.add_field(name="Мой создатель NeckitWin", value="Связаться <@429562004399980546>", inline=False)
-        embed.add_field(name="Мои разработчики:", value="NeckitWin и Enisey23", inline=False)
+        embed.add_field(name="Мой создатель и разработчик - NeckitWin", value="Связаться <@429562004399980546>", inline=False)
         embed.set_footer(text="Добавь меня на свой сервер няя <3")
         embed.set_author(name=f"Запрос от {interaction.author.name}")
         embed.set_thumbnail(url=self.bot.user.avatar.url)
@@ -80,6 +79,19 @@ class Infomod(commands.Cog):
         embed.add_field(name="Количество категорий:", value=f"{len(interaction.guild.categories)}", inline=True)
         # покажи все роли сервера
         embed.set_thumbnail(url=interaction.guild.icon.url)
+        await interaction.response.send_message(embed=embed)
+
+    @commands.slash_command(name="role", description="Показывает информацию о роли")
+    async def role(self, interaction: disnake.CommandInteraction, role: disnake.Role):
+        embed = disnake.Embed(title=f"Информация о роли {role.name}", description=f"Внешность роли: {role.mention} \n", color=0x2f3136)
+        embed.add_field(name="ID роли:", value=f"{role.id}", inline=True)
+        embed.add_field(name="Уровень роли:", value=f"{role.position}", inline=True)
+        embed.add_field(name="Цвет роли:", value=f"{role.color}", inline=True)
+        embed.add_field(name=f"Количество владельцев роли: {len(role.members)}", value="", inline=False)
+        if role.icon is not None:
+            embed.set_thumbnail(url=role.icon.url)
+        else:
+            embed.set_thumbnail(url=interaction.guild.icon.url)
         await interaction.response.send_message(embed=embed)
 
 def setup(bot):
