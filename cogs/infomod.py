@@ -74,8 +74,6 @@ class Infomod(commands.Cog):
     async def server(self, interaction: disnake.CommandInteraction):
         embed = disnake.Embed(title=f"Информация о сервере {interaction.guild.name}", description=f"Владелец сервера: {interaction.guild.owner.mention}", color=0x2f3136)
         embed.add_field(name="Участники:", value=f"Всего:{len(interaction.guild.members)}", inline=True)
-        # является ли пользователь ботом
-        embed.add_field(name="Является ли пользователь ботом:", value=f"{interaction.user.bot}", inline=True)
         embed.add_field(name="Количество текстовых каналов:", value=f"{len(interaction.guild.text_channels)}", inline=True)
         embed.add_field(name="Количество голосовых каналов:", value=f"{len(interaction.guild.voice_channels)}", inline=True)
         embed.add_field(name="Количество ролей:", value=f"{len(interaction.guild.roles)}", inline=True)

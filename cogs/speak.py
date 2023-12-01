@@ -20,7 +20,7 @@ class Speak(commands.Cog):
             await message.channel.send(f"Приветствую, {message.author.mention}!")
         elif "тест" in message.content.lower():
             await message.channel.send(f"Я работаю, всё хорошо!")
-        elif "анима, " in message.content.lower():
+        elif "анима" in message.content.lower():
             await message.channel.send(random.choice(json.load(open('jsons/ask.json', encoding='utf-8'))))
 
 def setup(bot):

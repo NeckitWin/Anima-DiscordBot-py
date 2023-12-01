@@ -5,14 +5,28 @@ import disnake
 from disnake.ext import commands
 
 with open('token.json', 'r') as f:
-    token = json.load(f)
+        token = json.load(f)
 
 token = token.get('token')
 
-intents=disnake.Intents.all()
-bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
+with open('jsons/prefix.json', 'r') as f:
+    prefix = json.load(f)
 
-admin = 993270145302667307
+intents = disnake.Intents.all()
+
+def get_prefix(bot, message):
+    server_id = str(message.guild.id)
+    with open('jsons/prefix.json', 'r') as f:
+        prefix_list = json.load(f)
+
+    for entry in prefix_list:
+        if str(entry["serverId"]) == server_id:
+            return entry["prefix"]
+    return '!'
+
+bot = commands.Bot(command_prefix=get_prefix, intents=intents, help_command=None)
+
+admin = 429562004399980546
 
 @bot.event
 async def on_ready():
@@ -20,28 +34,8 @@ async def on_ready():
     await bot.change_presence(status = disnake.Status.dnd, activity = disnake.Activity(name=f'/help',type=disnake.ActivityType.watching))
 
 @bot.command()
-@commands.has_role(admin)
-async def reload(ctx, extension):
-    extension = extension.lower()
-    if f'cogs.{extension}' in bot.extensions:
-        bot.unload_extension(f'cogs.{extension}')
-        bot.load_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} перезагружен')
-    else:
-        await ctx.send(f'{extension} не установлен либо не был загружен')
-@bot.command()
-@commands.has_role(admin)
-async def unload(ctx, extension):
-    extension = extension.lower()
-    if f'cogs.{extension}' in bot.extensions:
-        bot.unload_extension(f'cogs.{extension}')
-        await ctx.send(f'{extension} отгружен')
-    else:
-        await ctx.send(f'{extension} не установлен либо не был загружен')
-
-@bot.command()
 async def reload_all(ctx):
-    if ctx.author.top_role.id != admin:
+    if ctx.author.id != admin:
         await ctx.send('Команда доступна только для основателя бота')
     else:
         for cog in list(bot.extensions):
@@ -51,7 +45,7 @@ async def reload_all(ctx):
 
 @bot.slash_command(name='reload_all', description='Перезагрузить все коги (доступно только владельцу бота)')
 async def reload_all(ctx):
-    if ctx.author.top_role.id != admin:
+    if ctx.author.id != admin:
         await ctx.send('Команда доступна только для основателя бота', ephemeral=True)
     else:
         for cog in list(bot.extensions):
