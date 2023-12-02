@@ -15,7 +15,6 @@ class Ranime(commands.Cog):
         with open('jsons/anime.json', 'r', encoding='utf-8') as f:
             anime_list = json.load(f)
         random_anime = random.choice(anime_list)
-
         embed = disnake.Embed(title=f"Советую посмотреть", color=0xff0099)
         embed.add_field(name=f"Anime - {random_anime['name']}",value="", inline=False)
         embed.set_image(url=random_anime['link'])

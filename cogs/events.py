@@ -43,6 +43,5 @@ class Events(commands.Cog):
                 self.reaction_given = False
 
 
-
 def setup(bot):
     bot.add_cog(Events(bot))

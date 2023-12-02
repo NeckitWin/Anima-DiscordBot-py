@@ -49,14 +49,27 @@ class Infomod(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @commands.slash_command(name="avatar", description="Показывает аватар пользователя")
-    async def avatar(self, interaction: disnake.CommandInteraction, member: disnake.Member = commands.Param(lambda i: i.author, name="member", description="Пользователь, аватар которого нужно посмотреть")):
-        user = await self.bot.fetch_user(member.id)
-        if user.display_avatar.url is None:
-            await interaction.response.send_message("У этого пользователя нет аватара!", ephemeral=True)
+    async def avatar(self, interaction: disnake.CommandInteraction,
+                     member: disnake.Member = commands.Param(lambda i: i.author, name="member",
+                                                             description="Пользователь, аватар которого нужно посмотреть")):
+        # Создаем первый эмбед с изображением обычного аватара
+        embed1 = disnake.Embed(title="Вы запросили аватар", description=f"Пользователя {member.mention}",
+                               color=interaction.author.color)
+        if member.avatar.url is not None:
+            embed1.set_image(url=member.avatar.with_size(512).url)
         else:
-            embed = disnake.Embed(title="Вы запросили аватар", description=f"Пользователя {user.mention}", color=0xa269ff)
-            embed.set_image(url=user.display_avatar.url)
-            await interaction.response.send_message(embed=embed)
+            embed1.add_field(name="Обычный Аватар", value="У этого пользователя нет обычного аватара.")
+
+        # Создаем второй эмбед с изображением дисплей-аватара
+        embed2 = disnake.Embed(title="Серверный аватар", description=f"Пользователя {member.mention}",
+                               color=0xa269ff)
+        if member.display_avatar.url is not None:
+            embed2.set_image(url=member.display_avatar.with_size(512).url)
+        else:
+            embed2.add_field(name="Дисплей-Аватар", value="У этого пользователя нет дисплей-аватара.")
+
+        # Отправляем оба эмбеда в одном сообщении
+        await interaction.response.send_message(embeds=[embed1, embed2])
 
     @commands.slash_command(name="banner", description="Показывает баннер пользователя")
     async def banner(self, interaction: disnake.CommandInteraction, member: disnake.Member = commands.Param(lambda i: i.author, name="member", description="Пользователь, баннер которого нужно посмотреть")):

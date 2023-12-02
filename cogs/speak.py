@@ -3,8 +3,6 @@ from disnake.ext import commands
 import random
 import json
 
-
-
 class Speak(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
