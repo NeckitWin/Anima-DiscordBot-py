@@ -21,16 +21,13 @@ class Events(commands.Cog):
             embed.set_image(url=random.choice(json.load(open('jsons\hi.json'))))
             await channel.send(member.mention,embed=embed)
 
-    # ставить рандомные emoji на новые сообщения в чатах используя эмодзи с сервера, на котором появляются сообщения, то есть надо вытащить массив эмодзи сервера
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
             return
         if message.guild:
             self.total_counter += 1
-
             if not self.reaction_given:
-                # Даем реакцию рандомно
                 if random.randint(1, 20) == 20:
                     guild_emojis = message.guild.emojis
                     if guild_emojis:

@@ -51,12 +51,6 @@ class Admin(commands.Cog):
             if guild.icon is not None:
                 embed.set_thumbnail(url=guild.icon.url)
             await channelid.send(embed=embed)
-        else:
-            embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!",description=f"Название сервера **{guild.name}**", color=0xff0000)
-            embed.add_field(name="Я не смогу создать приглашение на этот сервер :(", value="*У меня нет прав*(",inline=False)
-            if guild.icon is not None:
-                embed.set_thumbnail(url=guild.icon.url)
-            await channelid.send(embed=embed)
 
     @commands.slash_command(name="prefix", description="Устанавливает новый префикс на вашем сервере")
     @commands.has_permissions(administrator=True)
