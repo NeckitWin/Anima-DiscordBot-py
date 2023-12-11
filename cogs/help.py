@@ -10,12 +10,10 @@ class Help(commands.Cog):
 
     @commands.slash_command(name="help", description="Помощь и мои команды")
     async def help(self, interaction):
-        embed = disnake.Embed(title="Список моих команд:", description="!help - покажет это окно\n\nУ всех моих команд есть описание, при вводе их в чате вы увидите их", color=interaction.author.color)
-        embed.add_field(name="Команды для пользователей:", value="/avatar /banner /user /role - Информация и контент о участниках сервера", inline=False)
-        embed.add_field(name="Помощь:",value="**/ranime** - Выбрать случайное аниме для просмотра", inline=False)
-        embed.add_field(name="Показать эмоции:", value="/kiss /pat /hug /cry /bite /hit", inline=False)
-        embed.add_field(name="Команды для администрации:", value="/prefix - Позволяет изменить префикс бота на своём сервере", inline=False)
-        embed.set_thumbnail(url=self.bot.user.avatar.url)
+        embed = disnake.Embed(title="Список моих команд:", color=interaction.author.color)
+        embed.add_field(name="👑Административные:", value="</loggs:1180621713390714910> | </clear:1179587342655307776> | </prefix:1180255305230188554>", inline=False)
+        embed.add_field(name="👤Пользовательские:",value="</user:1180637764803375115> | </banner:1180637764803375117> | </avatar:1180637764803375116> | </role:1180637764803375119>", inline=False)
+        embed.add_field(name="✨Развлечения:",value="</ranime:1179418590529716224>", inline=False)
         embed.set_image(url="https://media.tenor.com/-Q_q8PALcRkAAAAC/hi-anime.gif")
         await interaction.send(embed=embed)
 
