@@ -1,15 +1,6 @@
 import disnake
 from disnake.ext import commands
 
-def emojis(badge):
-    # Замените словарь emoji_dict на свои emoji
-    emoji_dict = {
-        'hypesquad': '<:hypesquad:1183433298878410772>',
-        # Добавьте другие бейджи и их emoji
-        # 'другой_бейдж': '<:другой_бейдж:идентификатор>',
-    }
-    return emoji_dict.get(str(badge), str(badge))
-
 class Infomod(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -64,15 +55,12 @@ class Infomod(commands.Cog):
     async def avatar(self, interaction: disnake.CommandInteraction,
                      member: disnake.Member = commands.Param(lambda i: i.author, name="member",
                                                              description="Пользователь, аватар которого нужно посмотреть")):
-        # Создаем первый эмбед с изображением обычного аватара
         embed1 = disnake.Embed(title="Вы запросили аватар", description=f"Пользователя {member.mention}",
                                color=interaction.author.color)
         if member.avatar.url is not None:
             embed1.set_image(url=member.avatar.with_size(512).url)
         else:
             embed1.add_field(name="Обычный Аватар", value="У этого пользователя нет обычного аватара.")
-
-        # Создаем второй эмбед с изображением дисплей-аватара
         embed2 = disnake.Embed(title="Серверный аватар", description=f"Пользователя {member.mention}",
                                color=0xa269ff)
         if member.display_avatar.url is not None:
@@ -93,7 +81,6 @@ class Infomod(commands.Cog):
             embed.set_image(url=user.banner)
             await interaction.response.send_message(embed=embed)
 
-    #команда, которая выводит информацию о сервере, на сервере которому она была вызвана
     @commands.slash_command(name="server", description="Показывает информацию о сервере")
     async def server(self, interaction: disnake.CommandInteraction):
         embed = disnake.Embed(title=f"Информация о сервере {interaction.guild.name}", description=f"Владелец сервера: {interaction.guild.owner.mention}", color=0x2f3136)
@@ -102,7 +89,6 @@ class Infomod(commands.Cog):
         embed.add_field(name="Количество голосовых каналов:", value=f"{len(interaction.guild.voice_channels)}", inline=True)
         embed.add_field(name="Количество ролей:", value=f"{len(interaction.guild.roles)}", inline=True)
         embed.add_field(name="Количество категорий:", value=f"{len(interaction.guild.categories)}", inline=True)
-        # покажи все роли сервера
         embed.set_thumbnail(url=interaction.guild.icon.url)
         await interaction.response.send_message(embed=embed)
 
@@ -118,7 +104,6 @@ class Infomod(commands.Cog):
         else:
             embed.set_thumbnail(url=interaction.guild.icon.url)
         await interaction.response.send_message(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(Infomod(bot))
