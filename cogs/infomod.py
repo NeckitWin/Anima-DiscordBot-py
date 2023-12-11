@@ -40,7 +40,6 @@ class Infomod(commands.Cog):
         if member is None:
             member = interaction.author
         embed = disnake.Embed(title=f"Информация о пользователе {user.display_name}", description=f"Логин: **{user.name}** | {user.mention}", color=member.color)
-        embed.add_field(name="Бейджи", value=" ".join(emoji_badges) if emoji_badges else "У пользователя нет бейджей", inline=False)
         embed.add_field(name="Высшая роль", value=member.top_role.mention, inline=False)
         embed.add_field(name="Аккаунт создан", value=member.created_at.strftime("%d.%m.%Y"), inline=True)
         embed.add_field(name="Присоединился на сервер", value=member.joined_at.strftime("%d.%m.%Y"), inline=True)

@@ -1,12 +1,11 @@
 import disnake
 from disnake.ext import commands
-import random
 import json
 
 nikita = 429562004399980546
 
 class Admin(commands.Cog):
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
     @commands.Cog.listener()
     async def on_ready(self):
@@ -105,8 +104,6 @@ class Admin(commands.Cog):
         else:
             await interaction.response.send_message(f'Эта команда предназначена для основателя бота :3', ephemeral=True)
 
-# команда добавления канала для записи логов
-
     @commands.slash_command(name="loggs", description="Команда для добавления сервера и канала для логов")
     async def loggs(self, interaction):
         if not interaction.author.guild_permissions.administrator:
@@ -155,7 +152,6 @@ class Admin(commands.Cog):
             await interaction.response.send_message(f'Логи для сервера {server_id} успешно удалены!', ephemeral=True)
         else:
             await interaction.response.send_message(f'Логи для сервера {server_id} не найдены.', ephemeral=True)
-
 
 def setup(bot):
     bot.add_cog(Admin(bot))

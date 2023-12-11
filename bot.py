@@ -31,7 +31,7 @@ admin = 429562004399980546
 @bot.event
 async def on_ready():
     print('Я успешно запустилась!')
-    await bot.change_presence(status = disnake.Status.dnd, activity = disnake.Activity(name=f'/help',type=disnake.ActivityType.watching))
+    await bot.change_presence(status = disnake.Status.idle, activity = disnake.Activity(type = disnake.ActivityType.watching, name = f'за {len(bot.guilds)} серверами'))
 
 @bot.command()
 async def reload_all(ctx):
