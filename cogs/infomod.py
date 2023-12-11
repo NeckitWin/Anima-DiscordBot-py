@@ -1,6 +1,15 @@
 import disnake
 from disnake.ext import commands
 
+def emojis(badge):
+    # Замените словарь emoji_dict на свои emoji
+    emoji_dict = {
+        'hypesquad': '<:hypesquad:1183433298878410772>',
+        # Добавьте другие бейджи и их emoji
+        # 'другой_бейдж': '<:другой_бейдж:идентификатор>',
+    }
+    return emoji_dict.get(str(badge), str(badge))
+
 class Infomod(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -10,41 +19,45 @@ class Infomod(commands.Cog):
 
     @commands.slash_command(name="bot", description="Основная информация о Anima")
     async def bot(self,interaction):
-        embed = disnake.Embed(title=f"Я постараюсь выполнить все твои мечты! А зовут меня {self.bot.user.name}", description=f"**{self.bot.user.mention}**", color=0x00ff00)
+        embed = disnake.Embed(title=f"Я постараюсь выполнить все твои мечты! А зовут меня {self.bot.user.name}", color=0x00ff00)
         embed.add_field(name="Как мною пользоваться?", value="Используй комманду /help", inline=False)
-        embed.add_field(name="Количество серверов:", value=f"{len(self.bot.guilds)}", inline=True)
         embed.add_field(name="Количество пользователей:", value=f"{len(self.bot.users)}", inline=True)
-        embed.add_field(name="Мой официальный дискорд сервер:", value="https://discord.gg/pA7hxfHy7A", inline=False)
-        embed.add_field(name="Мой создатель и разработчик - NeckitWin", value="Связаться <@429562004399980546>", inline=False)
+        embed.add_field(name="Количество серверов:", value=f"{len(self.bot.guilds)}", inline=True)
+        embed.add_field(name="Мой основатель:", value="NeckitWin <@429562004399980546>", inline=False)
+        embed.add_field(name="Мои разработчики:", value="NeckitWin Enisey23", inline=True)
+        embed.add_field(name="Мой официальный дискорд сервер:", value="[Перейти на сервер](https://discord.gg/pA7hxfHy7A)", inline=True)
         embed.set_footer(text="Добавь меня на свой сервер няя <3")
-        embed.set_author(name=f"Запрос от {interaction.author.name}")
+        embed.set_author(name=f"Запрос от {interaction.author.name}", icon_url=interaction.author.avatar.url)
         embed.set_thumbnail(url=self.bot.user.avatar.url)
         embed.set_image(url="https://media.tenor.com/g75K3KA3VeAAAAAd/anime-sleep.gif")
         await interaction.response.send_message(embed=embed)
+
+
 
     @commands.slash_command(name="user", description="Показывает информацию о пользователе")
     async def user(self, interaction: disnake.CommandInteraction, member: disnake.Member = commands.Param(lambda i: i.author, name="member", description="Пользователь, информацию которого нужно посмотреть")):
         user = await self.bot.fetch_user(member.id)
         if member is None:
             member = interaction.author
-        embed = disnake.Embed(title=f"Информация о пользователе {user.display_name}", description=f"Логин: **{user.name}**", color=member.color)
-        embed.add_field(name="Роль", value=member.top_role.mention, inline=False)
+        embed = disnake.Embed(title=f"Информация о пользователе {user.display_name}", description=f"Логин: **{user.name}** | {user.mention}", color=member.color)
+        embed.add_field(name="Бейджи", value=" ".join(emoji_badges) if emoji_badges else "У пользователя нет бейджей", inline=False)
+        embed.add_field(name="Высшая роль", value=member.top_role.mention, inline=False)
         embed.add_field(name="Аккаунт создан", value=member.created_at.strftime("%d.%m.%Y"), inline=True)
         embed.add_field(name="Присоединился на сервер", value=member.joined_at.strftime("%d.%m.%Y"), inline=True)
         if member.status == disnake.Status.online:
-            embed.add_field(name="Статус", value="💚Онлайн💚", inline=False)
+            embed.add_field(name="Статус", value="<:busy:1183433301231415388> | Онлайн", inline=False)
         elif member.status == disnake.Status.dnd:
-            embed.add_field(name="Статус", value="❤️Не беспокоить❤️", inline=False)
+            embed.add_field(name="Статус", value="<:busy:1183433301231415388> | Не беспокоить", inline=False)
         elif member.status == disnake.Status.idle:
-            embed.add_field(name="Статус", value="💛Не активен💛", inline=False)
+            embed.add_field(name="Статус", value="<:idle:1183433294596034651> | Не активен", inline=False)
         elif member.status == disnake.Status.offline:
-            embed.add_field(name="Статус", value="❔Оффлайн❔", inline=False)
+            embed.add_field(name="Статус", value="<:offline:1183433298878410772> | Оффлайн", inline=False)
         else:
-            embed.add_field(name="Статус", value="Оч странно", inline=False)
+            embed.add_field(name="Статус", value="❔ | Очень странно", inline=False)
         embed.set_thumbnail(url=user.display_avatar.url)
         if user.banner is not None:
             embed.set_image(url=user.banner)
-        embed.set_author(name=f"Запрос от {interaction.author.display_name}")
+        embed.set_author(name=f"Запрос от {interaction.author.display_name}", icon_url=interaction.author.avatar.url)
         embed.set_footer(text=f"Айди пользователя: {user.id}")
         await interaction.response.send_message(embed=embed)
 
@@ -106,6 +119,7 @@ class Infomod(commands.Cog):
         else:
             embed.set_thumbnail(url=interaction.guild.icon.url)
         await interaction.response.send_message(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Infomod(bot))
