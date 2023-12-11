@@ -1,11 +1,12 @@
 import disnake
 from disnake.ext import commands
+import random
 import json
 
 nikita = 429562004399980546
 
 class Admin(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self,bot):
         self.bot = bot
     @commands.Cog.listener()
     async def on_ready(self):
@@ -34,24 +35,14 @@ class Admin(commands.Cog):
         server = self.bot.get_guild(server_id)
         channelid = server.get_channel(channel_id)
 
+        embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!", description=f"Название сервера **{guild.name}**", color=0xd469ff)
+        embed.add_field(name="Пригласил пользователь", value=f"{guild.owner.mention} ID: {guild.owner.id} ({guild.owner.name})", inline=True)
         if guild.me.guild_permissions.create_instant_invite:
-            for channel in guild.text_channels:
-                if channel.permissions_for(guild.me).create_instant_invite:
-                    invite = await channel.create_invite()
-                    if channel is not None:
-                        embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!", description=f"Название сервера **{guild.name}**", color=0xd469ff)
-                        embed.add_field(name="Меня пригласил", value=f"{guild.owner.mention} ID: {guild.owner.id} ({guild.owner.name})", inline=False)
-                        embed.add_field(name="Я создала вам приглашение, если вы захотите посетить этот сервер <3", value=invite.url, inline=False)
-                        if guild.icon is not None:
-                            embed.set_thumbnail(url=guild.icon.url)
-                        await channelid.send(embed=embed)
-        else:
-            embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!", description=f"Название сервера **{guild.name}**", color=0xff0000)
-            embed.add_field(name="Меня пригласил", value=f"{guild.owner.mention} ID: {guild.owner.id} ({guild.owner.name})", inline=False)
-            embed.add_field(name="Я не смогу создать приглашение на этот сервер :(", value="*У меня нет прав*(", inline=False)
-            if guild.icon is not None:
-                embed.set_thumbnail(url=guild.icon.url)
-            await channelid.send(embed=embed)
+            invite = await channelid.create_invite()
+            embed.add_field(name="Ссылка на сервер:", value=f"{invite}", inline=False)
+        if guild.icon is not None:
+            embed.set_thumbnail(url=guild.icon.url)
+        await channelid.send(embed=embed)
 
     @commands.slash_command(name="prefix", description="Устанавливает новый префикс на вашем сервере")
     @commands.has_permissions(administrator=True)
@@ -154,6 +145,9 @@ class Admin(commands.Cog):
             await interaction.response.send_message(f'Логи для сервера {server_id} успешно удалены!', ephemeral=True)
         else:
             await interaction.response.send_message(f'Логи для сервера {server_id} не найдены.', ephemeral=True)
+
+
+
 
 def setup(bot):
     bot.add_cog(Admin(bot))

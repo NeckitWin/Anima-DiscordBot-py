@@ -18,9 +18,9 @@ class Private_massage(commands.Cog):
     embed.set_thumbnail(url=self.bot.user.display_avatar.url)
     embed.set_footer(text=f"{guild.name} | {datetime.datetime.now()}", icon_url=guild.icon.url)
     
-    site_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Веб-сайт", custom_id="buttonSite", url="https://anima-bot.xyz/")
-    invite_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Пригласить бота", custom_id="buttonInvite")
-    support_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Сервер поддержки", custom_id="buttonSupport")
+    site_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Веб-сайт", url="https://github.com/NeckitWin/Anima-bot-discord")
+    invite_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Пригласить бота", url="https://discord.com/api/oauth2/authorize?client_id=1165781260203986994&permissions=8&scope=bot")
+    support_button = disnake.ui.Button(style=disnake.ButtonStyle.gray, label="Сервер поддержки", url="https://discord.gg/XZRQDUuKf7")
     
     view = disnake.ui.View()
     view.add_item(site_button)
