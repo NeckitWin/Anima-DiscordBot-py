@@ -40,12 +40,14 @@ class Admin(commands.Cog):
                     invite = await channel.create_invite()
                     if channel is not None:
                         embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!", description=f"Название сервера **{guild.name}**", color=0xd469ff)
+                        embed.add_field(name="Меня пригласил", value=f"{guild.owner.mention} ID: {guild.owner.id} ({guild.owner.name})", inline=False)
                         embed.add_field(name="Я создала вам приглашение, если вы захотите посетить этот сервер <3", value=invite.url, inline=False)
                         if guild.icon is not None:
                             embed.set_thumbnail(url=guild.icon.url)
                         await channelid.send(embed=embed)
-                    return
+        else:
             embed = disnake.Embed(title="Хозяин, меня пригласили на сервер, ура ура!", description=f"Название сервера **{guild.name}**", color=0xff0000)
+            embed.add_field(name="Меня пригласил", value=f"{guild.owner.mention} ID: {guild.owner.id} ({guild.owner.name})", inline=False)
             embed.add_field(name="Я не смогу создать приглашение на этот сервер :(", value="*У меня нет прав*(", inline=False)
             if guild.icon is not None:
                 embed.set_thumbnail(url=guild.icon.url)
