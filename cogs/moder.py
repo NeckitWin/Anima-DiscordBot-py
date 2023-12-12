@@ -18,6 +18,16 @@ class Moder(commands.Cog):
         else:
             await interaction.channel.purge(limit=amount + 1)
             await interaction.response.send_message(f"Удалено {amount} сообщений", ephemeral=True)
+    @clear.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("У вас нет прав на использование этой команды", ephemeral=True)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Укажите количество сообщений для удаления", ephemeral=True)
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Укажите количество сообщений для удаления", ephemeral=True)
+        else:
+            await ctx.send("Произошла неизвестная ошибка", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Moder(bot))
