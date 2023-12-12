@@ -19,17 +19,38 @@ class Levels(commands.Cog):
         else:
             await ctx.send("У вас нет прав")
 
-    @commands.slash_command(name="баланс", description="Показывает ваш баланс")
-    async def balance(self, inter, member: disnake.Member = None):
+    @commands.slash_command(name="level", aliases=["lvl"], description="Показывает ваш уровень либо уровень упомянутого пользователя")
+    async def level(self, ctx, member: disnake.Member = None):
         if not member:
-            member = inter.author
+            member = ctx.author
         await self.db.add_user(member)
         user = await self.db.get_user(member)
-        embed = disnake.Embed(title=f"Баланс {member}", color=0x2f3136)
-        embed.add_field(name="🪙Деньги", value=f"```{user[1]}```")
-        embed.add_field(name="💎Гемы", value=f"```{user[2]}```")
+        embed = disnake.Embed(title=f"Уровень {member}", color=0x2f3136)
+        embed.add_field(name="✨Уровень", value=f"```{user[2]}```")
         embed.set_thumbnail(url=member.avatar.url)
-        await inter.response.send_message(embed=embed)
+        await ctx.send(embed=embed)
+
+    @commands.slash_command(name="top", description="Показывает самых общительных пользователей")
+    async def top(self, ctx):
+        top = await self.db.get_top()
+        embed = disnake.Embed(title="Мировая таблица опыта!", description="**Просто общайся**, и получай опыт, няя <3", color=0x00ff00)
+        for i in range(len(top)):
+            if i == 0:
+                embed.add_field(name=f"🥇 {top[i][1]}", value=f"`Первое место {top[i][2]} опыта`", inline=False)
+            elif i == 1:
+                embed.add_field(name=f"🥈 {top[i][1]}", value=f"`Второе место {top[i][2]} опыта`", inline=False)
+            elif i == 2:
+                embed.add_field(name=f"🥉 {top[i][1]}", value=f"`Третье место {top[i][2]} опыта`", inline=False)
+            else:
+                embed.add_field(name=f"#{i + 1} {top[i][1]}", value=f"`{top[i][2]} опыта`", inline=False)
+        await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        await self.db.add_user(message.author)
+        await self.db.update_user(message.author)
 
 
 

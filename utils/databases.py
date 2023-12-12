@@ -11,8 +11,8 @@ class UserDB:
             cursor = await db.cursor()
             query = '''CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
-                money INTEGER,
-                gems INTEGER
+                name VARCHAR,
+                xp INTEGER
             )'''
             await cursor.execute(query)
             await db.commit()
@@ -29,12 +29,19 @@ class UserDB:
             if not await self.get_user(user):
                 cursor = await db.cursor()
                 query = '''INSERT INTO users VALUES (?, ?, ?)'''
-                await cursor.execute(query, (user.id, 0, 0))
+                await cursor.execute(query, (user.id, user.name, 0))
                 await db.commit()
 
-    async def update_money(self, user_id, money: int, gems: int):
+    async def update_user(self, user: disnake.Member):
         async with aiosqlite.connect(self.name) as db:
             cursor = await db.cursor()
-            query = '''UPDATE users SET money = money + ?, gems = gems + ? WHERE id = ?'''
-            await cursor.execute(query, (money, gems, user_id))
+            query = '''UPDATE users SET xp = xp + ? WHERE id = ?'''
+            await cursor.execute(query, (1, user.id))
             await db.commit()
+
+    async def get_top(self):
+        async with aiosqlite.connect(self.name) as db:
+            cursor = await db.cursor()
+            query = '''SELECT * FROM users ORDER BY xp DESC LIMIT 10'''
+            await cursor.execute(query)
+            return await cursor.fetchall()
