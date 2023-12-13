@@ -12,7 +12,9 @@ class UserDB:
             query = '''CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
                 name VARCHAR,
-                xp INTEGER
+                xp INTEGER,
+                lvl INTEGER,
+                money INTEGER
             )'''
             await cursor.execute(query)
             await db.commit()
@@ -28,8 +30,8 @@ class UserDB:
         async with aiosqlite.connect(self.name) as db:
             if not await self.get_user(user):
                 cursor = await db.cursor()
-                query = '''INSERT INTO users VALUES (?, ?, ?)'''
-                await cursor.execute(query, (user.id, user.name, 0))
+                query = '''INSERT INTO users VALUES (?, ?, ?, ?, ?)'''
+                await cursor.execute(query, (user.id, user.name, 0, 0, 1000))
                 await db.commit()
 
     async def update_user(self, user: disnake.Member):

@@ -95,14 +95,11 @@ class Infomod(commands.Cog):
     @commands.slash_command(name="role", description="Показывает информацию о роли")
     async def role(self, interaction: disnake.CommandInteraction, role: disnake.Role):
         embed = disnake.Embed(title=f"Информация о роли {role.name}", description=f"Внешность роли: {role.mention} \n", color=0x2f3136)
-        embed.add_field(name="ID роли:", value=f"{role.id}", inline=True)
+        embed.add_field(name=f"Количество владельцев роли:", value=f"{len(role.members)}", inline=True)
         embed.add_field(name="Уровень роли:", value=f"{role.position}", inline=True)
         embed.add_field(name="Цвет роли:", value=f"{role.color}", inline=True)
-        embed.add_field(name=f"Количество владельцев роли: {len(role.members)}", value="", inline=False)
-        if role.icon is not None:
-            embed.set_thumbnail(url=role.icon.url)
-        else:
-            embed.set_thumbnail(url=interaction.guild.icon.url)
+        embed.add_field(name="ID роли:", value=f"```{role.id}```", inline=True)
+        embed.set_thumbnail(url=interaction.guild.icon.url if interaction.guild.icon else None)
         await interaction.response.send_message(embed=embed)
 
 def setup(bot):

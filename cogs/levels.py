@@ -26,7 +26,7 @@ class Levels(commands.Cog):
         await self.db.add_user(member)
         user = await self.db.get_user(member)
         embed = disnake.Embed(title=f"Уровень {member}", color=0x2f3136)
-        embed.add_field(name="✨Уровень", value=f"```{user[2]}```")
+        embed.add_field(name="✨Количество опыта:", value=f"```{user[2]}```")
         embed.set_thumbnail(url=member.avatar.url)
         await ctx.send(embed=embed)
 
@@ -43,6 +43,7 @@ class Levels(commands.Cog):
                 embed.add_field(name=f"🥉 {top[i][1]}", value=f"`Третье место {top[i][2]} опыта`", inline=False)
             else:
                 embed.add_field(name=f"#{i + 1} {top[i][1]}", value=f"`{top[i][2]} опыта`", inline=False)
+        embed.set_image(url="https://i.pinimg.com/originals/67/c4/3e/67c43e28053fa2cb1ca5d7e267cd1907.gif")
         await ctx.send(embed=embed)
 
     @commands.Cog.listener()
@@ -51,8 +52,6 @@ class Levels(commands.Cog):
             return
         await self.db.add_user(message.author)
         await self.db.update_user(message.author)
-
-
 
 def setup(bot):
     bot.add_cog(Levels(bot))
