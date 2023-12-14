@@ -47,3 +47,10 @@ class UserDB:
             query = '''SELECT * FROM users ORDER BY xp DESC LIMIT 10'''
             await cursor.execute(query)
             return await cursor.fetchall()
+
+    async def update_name(self, user: disnake.Member):
+        async with aiosqlite.connect(self.name) as db:
+            cursor = await db.cursor()
+            query = '''UPDATE users SET name = ? WHERE id = ?'''
+            await cursor.execute(query, (user.name, user.id))
+            await db.commit()

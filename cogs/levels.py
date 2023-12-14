@@ -24,6 +24,7 @@ class Levels(commands.Cog):
         if not member:
             member = ctx.author
         await self.db.add_user(member)
+        await self.db.update_name(member)
         user = await self.db.get_user(member)
         embed = disnake.Embed(title=f"Уровень {member}", color=0x2f3136)
         embed.add_field(name="✨Количество опыта:", value=f"```{user[2]}```")
@@ -44,6 +45,7 @@ class Levels(commands.Cog):
             else:
                 embed.add_field(name=f"#{i + 1} {top[i][1]}", value=f"`{top[i][2]} опыта`", inline=False)
         embed.set_image(url="https://i.pinimg.com/originals/67/c4/3e/67c43e28053fa2cb1ca5d7e267cd1907.gif")
+        embed.set_footer(text="Чтобы обновить никнейм - введите команду /level", icon_url=ctx.author.avatar.url if ctx.author.avatar else None)
         await ctx.send(embed=embed)
 
     @commands.Cog.listener()
