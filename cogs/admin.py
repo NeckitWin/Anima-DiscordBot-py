@@ -100,30 +100,30 @@ class Admin(commands.Cog):
     @commands.slash_command(name="loggs", description="Команда для добавления сервера и канала для логов")
     async def loggs(self, interaction):
         if not interaction.author.guild_permissions.administrator:
-            await interaction.response.send_message("У вас недостаточно прав для выполнения этой команды.",ephemeral=True)
-            return
-        server_id = interaction.guild.id
-        channel_id = interaction.channel.id
+            await interaction.response.send_message("Для выполнения команды нужны права администратора.",ephemeral=True)
+        else:
+            server_id = interaction.guild.id
+            channel_id = interaction.channel.id
 
-        with open('jsons/loggs.json', 'r', encoding='utf-8') as f:
-            loggs_channels_list = json.load(f)
-        for log_channel in loggs_channels_list:
-            if log_channel["serverId"] == server_id:
-                await interaction.response.send_message(f'Логи для сервера {server_id} уже установлены!\nЕсли хотите изменить/удалить канал логов, используйте команду /deloggs', ephemeral=True)
-                return
-        new_log_channel = {"serverId": server_id, "logChannelId": channel_id}
-        loggs_channels_list.append(new_log_channel)
+            with open('jsons/loggs.json', 'r', encoding='utf-8') as f:
+                loggs_channels_list = json.load(f)
+            for log_channel in loggs_channels_list:
+                if log_channel["serverId"] == server_id:
+                    await interaction.response.send_message(f'Логи для сервера {server_id} уже установлены!\nЕсли хотите изменить/удалить канал логов, используйте команду /deloggs', ephemeral=True)
+                    return
+            new_log_channel = {"serverId": server_id, "logChannelId": channel_id}
+            loggs_channels_list.append(new_log_channel)
 
-        with open('jsons/loggs.json', 'w', encoding='utf-8') as f:
-            json.dump(loggs_channels_list, f, ensure_ascii=False, indent=4)
+            with open('jsons/loggs.json', 'w', encoding='utf-8') as f:
+                json.dump(loggs_channels_list, f, ensure_ascii=False, indent=4)
 
-        embed = disnake.Embed(title="Логи для сервера успешно установлены! Юхуу!", color=0x00ff00)
-        embed.set_thumbnail(url=interaction.guild.icon.url)
-        embed.add_field(name="Сервер:", value=interaction.guild.name, inline=False)
-        embed.add_field(name="Канал:", value=interaction.channel.name, inline=False)
-        embed.add_field(name="Как убрать запись логов?", value="Введите команду /deloggs в любом канале вашего сервера.", inline=False)
-        embed.set_footer(text=f"Администратор {interaction.user.name}")
-        await interaction.response.send_message(embed=embed)
+            embed = disnake.Embed(title="Логи для сервера успешно установлены! Юхуу!", color=0x00ff00)
+            embed.set_thumbnail(url=interaction.guild.icon.url)
+            embed.add_field(name="Сервер:", value=interaction.guild.name, inline=False)
+            embed.add_field(name="Канал:", value=interaction.channel.name, inline=False)
+            embed.add_field(name="Как убрать запись логов?", value="Введите команду /deloggs в любом канале вашего сервера.", inline=False)
+            embed.set_footer(text=f"Администратор {interaction.user.name}")
+            await interaction.response.send_message(embed=embed)
 
     @commands.slash_command(name="deloggs", description="Команда для удаления настроек логов на сервере")
     async def deloggs(self, interaction):
