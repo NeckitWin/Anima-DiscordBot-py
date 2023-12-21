@@ -15,7 +15,7 @@ class Duel(commands.Cog):
     embed1.set_thumbnail(url=user.display_avatar.url)
 
     if ctx.author.id == user.id:
-      await ctx.send(f"{user.mention} нельзя вызывать самого себя!")
+      await ctx.send(f"{user.display_name}, нельзя вызывать самого себя!")
       return
 
     self.changePos = True
@@ -26,9 +26,9 @@ class Duel(commands.Cog):
     self.win = False
   
     async def buttonUserWin(interaction: disnake.Interaction):
-      new_embed = disnake.Embed(title=f"Игрок {interaction.user.name} победил в дуэли!", description=f"Он победил со счётом  \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"{interaction.user.display_name}, победил в дуэли!", description=f"Он победил со счётом:  \n1) {ctx.author.display_name} - {self.firstUserCounter}! \n2) {user.display_name} - {self.secondUserCounter}!", color=0xffd700)
       new_embed.set_thumbnail(url=interaction.author.display_avatar.url)
-      await interaction.response.edit_message(embed=new_embed)
+      await interaction.response.edit_message(embed=new_embed, view=None)
 
     async def checkWin():
 
@@ -86,11 +86,11 @@ class Duel(commands.Cog):
 
       if (self.changePos): 
         self.checkUser = ctx.author.id
-        self.nameUser = ctx.author.name
+        self.nameUser = ctx.author.display_name
         self.avatarUser = ctx.author.display_avatar.url
       else:
         self.checkUser = user.id
-        self.nameUser = user.name
+        self.nameUser = user.display_name
         self.avatarUser = user.display_avatar.url
           
       soft_button = disnake.ui.Button(style=disnake.ButtonStyle.green, label="Мягкий кулак", custom_id="buttonSoft")
@@ -100,7 +100,7 @@ class Duel(commands.Cog):
       view1.add_item(soft_button)
       view1.add_item(hard_button)
           
-      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери кулак которым будешь бить!\nСчёт \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"Ходит игрок, {self.nameUser}!", description=f"Выбери кулак которым будешь бить!\nСчёт: \n1) {ctx.author.display_name} - {self.firstUserCounter}!\n2) {user.display_name} - {self.secondUserCounter}!", color=0xffd700)
       new_embed.set_thumbnail(url=self.avatarUser)
       
       soft_button.callback = lambda i: button_callback(i,'soft')
@@ -116,14 +116,14 @@ class Duel(commands.Cog):
       
       if (self.changePos): 
         self.checkUser = ctx.author.id
-        self.nameUser = ctx.author.name
+        self.nameUser = ctx.author.display_name
         self.avatarUser = ctx.author.display_avatar.url
       else:
         self.checkUser = user.id
-        self.nameUser = user.name
+        self.nameUser = user.display_name
         self.avatarUser = user.display_avatar.url
       
-      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери спобос которым будешь защищаться!\nСчёт \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"Ходит игрок, {self.nameUser}!", description=f"Выбери спобос которым будешь защищаться!\nСчёт: \n1) {ctx.author.display_name} - {self.firstUserCounter}!\n2) {user.display_name} - {self.secondUserCounter}!", color=0xffd700)
       new_embed.set_thumbnail(url=self.avatarUser)
 
       dodge_button = disnake.ui.Button(style=disnake.ButtonStyle.green, label="Уворот", custom_id="buttonDodge")
@@ -144,7 +144,7 @@ class Duel(commands.Cog):
           # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
           return
        
-        new_embed = disnake.Embed(title=f"Игрок {interaction.user.name} принял дуэль!", description="Превым будет ходить тот кто вызвал на дуэль!", color=0xffd700)
+        new_embed = disnake.Embed(title=f"{interaction.user.display_name}, принял дуэль!", description="Превым будет ходить тот кто вызвал на дуэль!", color=0xffd700)
         new_embed.set_thumbnail(url=interaction.author.display_avatar.url)
         continue_button = disnake.ui.Button(style=disnake.ButtonStyle.blurple, label="Продолжить", custom_id="buttonContinue")
         view = disnake.ui.View()
@@ -164,7 +164,7 @@ class Duel(commands.Cog):
           # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
           return
 
-        new_embed = disnake.Embed(title=f"Противник убежал!", description=(f"{interaction.user.mention},за побег твоё очко было потеряно!"), color=0xffd700)
+        new_embed = disnake.Embed(title=f"Противник убежал!", description=(f"{interaction.user.display_name}, за побег твоё очко было потеряно!"), color=0xffd700)
         new_embed.set_thumbnail(url=interaction.author.display_avatar.url)
         await interaction.response.edit_message(embed=new_embed, view=None)
 
@@ -179,7 +179,7 @@ class Duel(commands.Cog):
     view.add_item(yes_button)
     view.add_item(no_button)
 
-    await ctx.send(f"{user.mention} Время отстоять свою честь!", embed=embed1, view=view)
+    await ctx.send(f"{user.mention}, время отстоять свою честь!", embed=embed1, view=view)
 
 def setup(bot):
     bot.add_cog(Duel(bot))
