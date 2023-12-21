@@ -14,6 +14,10 @@ class Duel(commands.Cog):
     embed1 = disnake.Embed(title="Вызов на дуэль!",description=f"Готовы ли вы принять участие в битве ВЕКА?\nЕсли вы откажитесь, то потеряете очко и честь!",color=0x00ff00)
     embed1.set_thumbnail(url=user.display_avatar.url)
 
+    if ctx.author.id == user.id:
+      await ctx.send(f"{user.mention} нельзя вызывать самого себя!")
+      return
+
     self.changePos = True
     self.firstUserCounter = 0
     self.secondUserCounter = 0
@@ -21,9 +25,8 @@ class Duel(commands.Cog):
     self.defChoose = 0
     self.win = False
   
-
     async def buttonUserWin(interaction: disnake.Interaction):
-      new_embed = disnake.Embed(title=f"Игрок {interaction.user.name} победил в дуэли!", description=f"Он победил со счётом {self.firstUserCounter}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"Игрок {interaction.user.name} победил в дуэли!", description=f"Он победил со счётом  \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
       new_embed.set_thumbnail(url=interaction.author.display_avatar.url)
       await interaction.response.edit_message(embed=new_embed)
 
@@ -55,7 +58,6 @@ class Duel(commands.Cog):
         
       elif button_type == 'dodge':
           self.defChoose = 2
-          print(self.interactionCheck, self.checkUser)
           if self.interactionCheck == self.checkUser:
             await checkWin()
           if self.win == True:
@@ -66,7 +68,6 @@ class Duel(commands.Cog):
         
       elif button_type == 'block':
           self.defChoose = 1
-          print(self.interactionCheck, self.checkUser)
           if self.interactionCheck == self.checkUser:
             await checkWin()
           if self.win == True:
@@ -75,11 +76,10 @@ class Duel(commands.Cog):
             await buttonFist(interaction)
           return
 
-      
     async def buttonFist(interaction: disnake.Interaction): 
       if self.contCheck:   
         if interaction.user.id != self.checkUser:
-          await interaction.send(f"{interaction.user.mention} не твоя очередь!")
+          # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
           return buttonFist
       else:
         self.contCheck = True  
@@ -100,7 +100,7 @@ class Duel(commands.Cog):
       view1.add_item(soft_button)
       view1.add_item(hard_button)
           
-      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери кулак которым будешь бить!\nСчёт {self.firstUserCounter}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери кулак которым будешь бить!\nСчёт \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
       new_embed.set_thumbnail(url=self.avatarUser)
       
       soft_button.callback = lambda i: button_callback(i,'soft')
@@ -111,7 +111,7 @@ class Duel(commands.Cog):
     
     async def buttonDefend(interaction: disnake.Interaction):
       if interaction.user.id != self.checkUser:
-        await interaction.send(f"{interaction.user.mention} не твоя очередь!")
+        # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
         return buttonDefend
       
       if (self.changePos): 
@@ -123,7 +123,7 @@ class Duel(commands.Cog):
         self.nameUser = user.name
         self.avatarUser = user.display_avatar.url
       
-      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери спобос которым будешь защищаться!\nСчёт  {self.firstUserCounter}:{self.secondUserCounter}", color=0xffd700)
+      new_embed = disnake.Embed(title=f"Ходит игрок {self.nameUser}!", description=f"Выбери спобос которым будешь защищаться!\nСчёт \n{ctx.author.name} - {self.firstUserCounter}\n{user.name}:{self.secondUserCounter}", color=0xffd700)
       new_embed.set_thumbnail(url=self.avatarUser)
 
       dodge_button = disnake.ui.Button(style=disnake.ButtonStyle.green, label="Уворот", custom_id="buttonDodge")
@@ -136,12 +136,12 @@ class Duel(commands.Cog):
       dodge_button.callback = lambda i: button_callback(i,'dodge')
       block_button.callback = lambda i: button_callback(i,'block')
       
-      await interaction.response.edit_message(embed=new_embed, view=view2)
+      await interaction.response.edit_message('', embed=new_embed, view=view2)
 
     def make_buttonYes():
       async def buttonYes(interaction: disnake.Interaction):
         if interaction.user.id != user.id:
-          await interaction.send(f"{interaction.user.mention} не твоя очередь!")
+          # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
           return
        
         new_embed = disnake.Embed(title=f"Игрок {interaction.user.name} принял дуэль!", description="Превым будет ходить тот кто вызвал на дуэль!", color=0xffd700)
@@ -149,11 +149,10 @@ class Duel(commands.Cog):
         continue_button = disnake.ui.Button(style=disnake.ButtonStyle.blurple, label="Продолжить", custom_id="buttonContinue")
         view = disnake.ui.View()
         view.add_item(continue_button)
-        await interaction.response.edit_message(embed=new_embed, view=view)
+        await interaction.response.edit_message('', embed=new_embed, view=view)
         self.contCheck = False
         continue_button.callback = buttonFist
         return continue_button
-
 
       yes_button = disnake.ui.Button(style=disnake.ButtonStyle.green, label="Принять", custom_id="buttonYes")
       yes_button.callback = buttonYes
@@ -162,7 +161,7 @@ class Duel(commands.Cog):
     def make_buttonNo():
       async def buttonNo(interaction: disnake.Interaction):
         if interaction.user.id != user.id:
-          await interaction.send(f"{interaction.user.mention} не твоя очередь!")
+          # await interaction.send(f"{interaction.user.name}, ход другого игрока!")
           return
 
         new_embed = disnake.Embed(title=f"Противник убежал!", description=(f"{interaction.user.mention},за побег твоё очко было потеряно!"), color=0xffd700)
